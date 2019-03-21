@@ -7,8 +7,15 @@
 
 
 
-//----------------------global vars---------------------------------
+//----------includes------------------------------------------------
+// SPI library (Serial Peripheral Interface (SPI))
+#include <SPI.h>
 
+// Arduino RFID Library
+#include <MFRC522.h>
+
+
+//----------------------global vars and defines---------------------
 
 
 
