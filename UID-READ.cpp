@@ -20,7 +20,7 @@
 #define RST_PIN   9
 
 //Slave select pin
-#define SS_PIN    10    
+#define SS_PIN    10
 
 
 //setup runs once, when the Arduino is first oiwerd on.
