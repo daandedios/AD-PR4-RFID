@@ -2,7 +2,7 @@
 //Developer:  Daan de Dios
 //Date:       2019-03-21
 //function:   RFID
-
+#include <Arduino.h>
 
 //---------------------- includs --------------------------------
 //servo lib.
@@ -16,7 +16,7 @@
 
 //---------------------- global vars ----------------------------
 //=========================== servo =============================
-Servo myservo;  // create servo object to control a servo
+Servo servoBarrier;  // create servo object to control the barrier Servo.
 //=========================== servo end =========================
 
 
@@ -25,6 +25,14 @@ Servo myservo;  // create servo object to control a servo
 
 
 //----------------------- functions -----------------------------
+//=========================== servo =============================
+void servo() {
+  servoBarrier.write(65);
+  delay(1000);
+  servoBarrier.write(0);
+  delay(1000);
+}
+//=========================== servo end =========================
 
 
 //----------------------- functions end -------------------------
@@ -33,11 +41,22 @@ Servo myservo;  // create servo object to control a servo
 
 //setup runs once, when the Arduino is first oiwerd on.
 void setup() {
+
+
+//=========================== servo =============================
+myservo.attach(7);  // attaches the servo on pin 9 to the servo object
+myservo.write(0);
+//=========================== servo end =========================
+
   
 }
 
 //loop runs continuously after the setup() has completed.
 void loop() {
+
+//=========================== servo =============================
+servo();
+//=========================== servo end =========================
 
 
 }
