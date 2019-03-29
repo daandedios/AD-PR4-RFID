@@ -1,7 +1,8 @@
 
-//Developer:  Daan de Dios
-//Date:       2019-03-21
+//developer:  Daan de Dios
+//date:       2019-03-21
 //function:   RFID
+
 #include <Arduino.h>
 
 //---------------------- includs --------------------------------
@@ -30,7 +31,6 @@ void servo() {
   servoBarrier.write(65);
   delay(1000);
   servoBarrier.write(0);
-  delay(1000);
 }
 //=========================== servo end =========================
 
