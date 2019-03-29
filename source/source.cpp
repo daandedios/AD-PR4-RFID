@@ -5,12 +5,17 @@
 
 #include <Arduino.h>
 
+
+
+
 //---------------------- includs --------------------------------
 //servo lib.
 #include <Servo.h>
 
 
 //---------------------- includs --------------------------------
+
+
 
 
 
@@ -30,6 +35,11 @@ int pos_servoBarrierClose = 0;
 
 
 
+
+
+
+
+
 //----------------------- functions -----------------------------
 //=========================== servo =============================
 void servo() {
@@ -37,7 +47,7 @@ void servo() {
   servoBarrier.write(pos_servoBarrierOpen);
 
   delay(1000);
-  
+
   //close barrier
   servoBarrier.write(pos_servoBarrierClose);
 }
@@ -45,6 +55,11 @@ void servo() {
 
 
 //----------------------- functions end -------------------------
+
+
+
+
+
 
 
 
@@ -64,7 +79,12 @@ myservo.write(0);   // initialize servo stage 0 --> close Barrier
 void loop() {
 
 //=========================== servo =============================
-servo();
+
+
+servo(); // opens barrier and clos barrier after 1000 miliseconds.
+
+
+
 //=========================== servo end =========================
 
 
