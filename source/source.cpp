@@ -18,6 +18,11 @@
 //---------------------- global vars ----------------------------
 //=========================== servo =============================
 Servo servoBarrier;  // create servo object to control the barrier Servo.
+
+//Servo positions
+int pos_servoBarrierOpen = 65;
+int pos_servoBarrierClose = 0;
+
 //=========================== servo end =========================
 
 
@@ -28,9 +33,13 @@ Servo servoBarrier;  // create servo object to control the barrier Servo.
 //----------------------- functions -----------------------------
 //=========================== servo =============================
 void servo() {
-  servoBarrier.write(65);
+  //open barrier
+  servoBarrier.write(pos_servoBarrierOpen);
+
   delay(1000);
-  servoBarrier.write(0);
+  
+  //close barrier
+  servoBarrier.write(pos_servoBarrierClose);
 }
 //=========================== servo end =========================
 
