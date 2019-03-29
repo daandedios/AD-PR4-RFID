@@ -44,8 +44,8 @@ void setup() {
 
 
 //=========================== servo =============================
-myservo.attach(7);  // attaches the servo on pin 9 to the servo object
-myservo.write(0);
+myservo.attach(7);  // attaches the servo on pin 7 to the servo object (servoBarrier)
+myservo.write(0);   // initialize servo stage 0 --> close Barrier
 //=========================== servo end =========================
 
   
