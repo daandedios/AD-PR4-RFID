@@ -34,12 +34,12 @@ int pos_servoBarrierClose = 0;
 
 
 //=========================== Display  ==========================
-const int rs = 9, // 
-          en = 8, 
-          d4 = 4, 
-          d5 = 3, 
-          d6 = 6, 
-          d7 = 2;
+const int rs = 2, // 
+          en = 4, 
+          d4 = 5, 
+          d5 = 6, 
+          d6 = 7, 
+          d7 = 8;
 
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
@@ -69,6 +69,7 @@ void servo() {
 
   //close barrier
   servoBarrier.write(pos_servoBarrierClose);
+  delay(1000);
 }
 //=========================== servo end =========================
 
@@ -97,13 +98,16 @@ void setupDisplay() {
 void setup() {
 
   //=========================== servo =============================
-  servoBarrier.attach(7);  // attaches the servo on pin 7 to the servo object (servoBarrier)
+  servoBarrier.attach(3);  // attaches the servo on pin 7 to the servo object (servoBarrier)
   servoBarrier.write(0);   // initialize servo stage 0 --> close Barrier
   //=========================== servo end =========================
 
 
   //=========================== Display  ==========================
   setupDisplay();
+  lcd.print("Anzahl Freie: ");
+  lcd.setCursor(0, 1);
+  lcd.print(numberOfFreeParkingSpaces);
   //=========================== Display end =======================
 
   
@@ -120,13 +124,13 @@ void setup() {
 void loop() {
 
   //=========================== servo =============================
-  servo(); // opens barrier and clos barrier after 1000 miliseconds.
+  //servo(); // opens barrier and clos barrier after 1000 miliseconds.
   //=========================== servo end =========================
 
 
   //=========================== Display  ==========================
+  
   lcd.setCursor(0, 1);
-  lcd.print("Anzahl Freie Parkplätze: ");
   lcd.print(numberOfFreeParkingSpaces);
   //=========================== Display end =======================
 
