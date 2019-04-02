@@ -69,6 +69,7 @@ void servo() {
 
   //close barrier
   servoBarrier.write(pos_servoBarrierClose);
+  delay(1000);
 }
 //=========================== servo end =========================
 
@@ -97,13 +98,16 @@ void setupDisplay() {
 void setup() {
 
   //=========================== servo =============================
-  servoBarrier.attach(3);  // attaches the servo on pin 3 to the servo object (servoBarrier)
+  servoBarrier.attach(3);  // attaches the servo on pin 7 to the servo object (servoBarrier)
   servoBarrier.write(0);   // initialize servo stage 0 --> close Barrier
   //=========================== servo end =========================
 
 
   //=========================== Display  ==========================
   setupDisplay();
+  lcd.print("Anzahl Freie: ");
+  lcd.setCursor(0, 1);
+  lcd.print(numberOfFreeParkingSpaces);
   //=========================== Display end =======================
 
   
@@ -120,13 +124,13 @@ void setup() {
 void loop() {
 
   //=========================== servo =============================
-  servo(); // opens barrier and clos barrier after 1000 miliseconds.
+  //servo(); // opens barrier and clos barrier after 1000 miliseconds.
   //=========================== servo end =========================
 
 
   //=========================== Display  ==========================
+  
   lcd.setCursor(0, 1);
-  lcd.print("Anzahl Freie Parkplätze: ");
   lcd.print(numberOfFreeParkingSpaces);
   //=========================== Display end =======================
 
