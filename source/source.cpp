@@ -127,6 +127,10 @@ void setup() {
 
 
   //=========================== RFID ==============================
+   // Diese Funktion wird einmalig beim Start ausgeführt
+  Serial.begin(9600);  // Serielle Kommunikation mit dem PC initialisieren
+  SPI.begin();         // Initialisiere SPI Kommunikation
+  mfrc522.PCD_Init();  // Initialisiere MFRC522 Lesemodul
   //=========================== RFID end ==========================
   
 }
