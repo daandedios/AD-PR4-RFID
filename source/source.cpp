@@ -50,6 +50,16 @@ int numberOfFreeParkingSpaces = 10;
 //=========================== Display end =======================
 
 //=========================== RFID ==============================
+#define RST_PIN   9     // SPI Reset Pin
+#define SS_PIN    10    // SPI Slave Select Pin
+
+byte card_uid[] = {0x71, 0x99, 0x2A, 0x08};
+byte batch_uid[] = {0x9A, 0xB8, 0x58, 0xD3};
+
+int card_check = false;
+int batch_check = false;
+
+MFRC522 mfrc522(SS_PIN, RST_PIN);   // Instanz des MFRC522 erzeugen
 //=========================== RFID end ==========================
 
 
