@@ -15,6 +15,9 @@
 //display lib.
 #include <LiquidCrystal.h>
 
+//RFID lib.
+#include <SPI.h>
+#include <MFRC522.h>
 
 //---------------------- includs --------------------------------
 
