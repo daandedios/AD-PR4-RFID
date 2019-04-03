@@ -22,8 +22,9 @@
 //---------------------- includs --------------------------------
 
 
+int check_card1;
 
-
+int checkSW = 0;
 
 
 //---------------------- global vars ----------------------------
@@ -35,6 +36,7 @@ int pos_servoBarrierOpen = 65;
 int pos_servoBarrierClose = 0;
 //=========================== servo end =========================
 
+int setTrue = 0;
 
 //=========================== Display  ==========================
 const int rs = 2, // 
@@ -78,9 +80,7 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);   // Instanz des MFRC522 erzeugen
 void servo() {
   //open barrier
   servoBarrier.write(pos_servoBarrierOpen);
-
   delay(1000);
-
   //close barrier
   servoBarrier.write(pos_servoBarrierClose);
   delay(1000);
@@ -97,6 +97,14 @@ void setupDisplay() {
 
 //=========================== RFID ==============================
 //=========================== RFID end ==========================
+
+//=========================== timer =============================
+void timer() {
+
+}
+//=========================== timer end =========================
+
+
 
 
 
@@ -120,7 +128,7 @@ void setup() {
 
   //=========================== Display  ==========================
   setupDisplay();
-  lcd.print("Anzahl Freie: ");
+  lcd.print("Anzahl Freie P.: ");
   lcd.setCursor(0, 1);
   lcd.print(numberOfFreeParkingSpaces);
   //=========================== Display end =======================
@@ -152,8 +160,6 @@ void loop() {
 
   //=========================== Display  ==========================
   
-  lcd.setCursor(0, 1);
-  lcd.print(numberOfFreeParkingSpaces);
   //=========================== Display end =======================
 
   //=========================== RFID ==============================
@@ -183,15 +189,43 @@ void loop() {
     for (int j=0; j<4; j++) {
       if (mfrc522.uid.uidByte[j] != batch_uid[j]) {
         batch_check = false;
+            check_card1 = 1;
       }
     }
+
+
  
     if (card_check) {
-     Serial.print("card");
+  
+      Serial.print("card");
+      servo();
+
+    if (checkSW == 0) {
+      lcd.clear();
+      lcd.print("Anzahl Freie P.: ");
+      lcd.setCursor(0, 1);
+      lcd.print("9");
+      checkSW = 1;
+    }
+    else{
+      lcd.clear();
+      lcd.print("Bitte bezahlen:");
+      lcd.setCursor(0, 1);
+      lcd.print("10.-");
+      delay(4000);
+      lcd.clear();
+      lcd.print("Anzahl Freie P.: ");
+      lcd.setCursor(0, 1);
+      lcd.print("10");
+      checkSW = 0;
+      
+      }
+      
     }
  
     if (batch_check) {
      Serial.print("batch");
+     servo();
     }
  
     // Versetzt die gelesene Karte in einen Ruhemodus, um nach anderen Karten suchen zu können.
