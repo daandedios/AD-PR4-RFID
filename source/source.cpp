@@ -57,9 +57,11 @@ int numberOfFreeParkingSpaces = 10;
 
 byte card_uid[] = {0x71, 0x99, 0x2A, 0x08};
 byte batch_uid[] = {0x9A, 0xB8, 0x58, 0xD3};
+byte batch2_uid[] = {0x05 0xC7 0x53 0xD3};
 
 int card_check = false;
 int batch_check = false;
+int batch2_check= false;
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Instanz des MFRC522 erzeugen
 //=========================== RFID end ==========================
@@ -80,7 +82,7 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);   // Instanz des MFRC522 erzeugen
 void servo() {
   //open barrier
   servoBarrier.write(pos_servoBarrierOpen);
-  delay(1000);
+  delay(2000);
   //close barrier
   servoBarrier.write(pos_servoBarrierClose);
   delay(1000);
@@ -194,6 +196,18 @@ void loop() {
     }
 
 
+    batch2_check = true;
+    for (int j=0; j<4; j++) {
+      if (mfrc522.uid.uidByte[j] != batch2_uid[j]) {
+        batch2_check = false;
+            check_card3 = 1;
+      }
+    }
+
+
+
+
+
  
     if (card_check) {
   
@@ -212,7 +226,7 @@ void loop() {
       lcd.print("Bitte bezahlen:");
       lcd.setCursor(0, 1);
       lcd.print("10.-");
-      delay(4000);
+      delay(3000);
       lcd.clear();
       lcd.print("Anzahl Freie P.: ");
       lcd.setCursor(0, 1);
@@ -226,6 +240,12 @@ void loop() {
     if (batch_check) {
      Serial.print("batch");
      servo();
+    }
+
+
+    if (batch2_check) {
+      Serial.print("batch");
+      servo();
     }
  
     // Versetzt die gelesene Karte in einen Ruhemodus, um nach anderen Karten suchen zu können.
