@@ -1,14 +1,11 @@
-
 //developer:  Daan de Dios
 //date:       2019-03-21
-//function:   RFID
-
-#include <Arduino.h>
-
-
-
+//function:   RFID Project, Mainberger-Hugelshofer-deDios
 
 //---------------------- includs --------------------------------
+//general arduino lib.
+#include <Arduino.h>
+
 //servo lib.
 #include <Servo.h>
 
@@ -18,7 +15,6 @@
 //RFID lib.
 #include <SPI.h>
 #include <MFRC522.h>
-
 //---------------------- includs --------------------------------
 
 
