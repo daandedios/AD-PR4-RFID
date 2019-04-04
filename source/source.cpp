@@ -1,26 +1,26 @@
-
 //developer:  Daan de Dios
 //date:       2019-03-21
-//function:   RFID
-
-#include <Arduino.h>
-
-
-
+//function:   RFID Project, Mainberger-Hugelshofer-deDios
 
 //---------------------- includs --------------------------------
+//general arduino lib.
+#include <Arduino.h>
+
 //servo lib.
 #include <Servo.h>
 
 //display lib.
 #include <LiquidCrystal.h>
 
-
+//RFID lib.
+#include <SPI.h>
+#include <MFRC522.h>
 //---------------------- includs --------------------------------
 
 
+int check_card1;
 
-
+int checkSW = 0;
 
 
 //---------------------- global vars ----------------------------
@@ -32,6 +32,7 @@ int pos_servoBarrierOpen = 65;
 int pos_servoBarrierClose = 0;
 //=========================== servo end =========================
 
+int setTrue = 0;
 
 //=========================== Display  ==========================
 const int rs = 2, // 
@@ -46,7 +47,20 @@ LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 int numberOfFreeParkingSpaces = 10;
 //=========================== Display end =======================
 
+//=========================== RFID ==============================
+#define RST_PIN   9     // SPI Reset Pin
+#define SS_PIN    10    // SPI Slave Select Pin
 
+byte card_uid[] = {0x71, 0x99, 0x2A, 0x08};
+byte batch_uid[] = {0x9A, 0xB8, 0x58, 0xD3};
+byte batch2_uid[] = {0x05 0xC7 0x53 0xD3};
+
+int card_check = false;
+int batch_check = false;
+int batch2_check= false;
+
+MFRC522 mfrc522(SS_PIN, RST_PIN);   // Instanz des MFRC522 erzeugen
+//=========================== RFID end ==========================
 
 
 
@@ -64,9 +78,7 @@ int numberOfFreeParkingSpaces = 10;
 void servo() {
   //open barrier
   servoBarrier.write(pos_servoBarrierOpen);
-
-  delay(1000);
-
+  delay(2000);
   //close barrier
   servoBarrier.write(pos_servoBarrierClose);
   delay(1000);
@@ -80,6 +92,15 @@ void setupDisplay() {
 }
 //=========================== Display end =======================
 
+
+//=========================== RFID ==============================
+//=========================== RFID end ==========================
+
+//=========================== timer =============================
+void timer() {
+
+}
+//=========================== timer end =========================
 
 
 
@@ -105,11 +126,18 @@ void setup() {
 
   //=========================== Display  ==========================
   setupDisplay();
-  lcd.print("Anzahl Freie: ");
+  lcd.print("Anzahl Freie P.: ");
   lcd.setCursor(0, 1);
   lcd.print(numberOfFreeParkingSpaces);
   //=========================== Display end =======================
 
+
+  //=========================== RFID ==============================
+   // Diese Funktion wird einmalig beim Start ausgeführt
+  Serial.begin(9600);  // Serielle Kommunikation mit dem PC initialisieren
+  SPI.begin();         // Initialisiere SPI Kommunikation
+  mfrc522.PCD_Init();  // Initialisiere MFRC522 Lesemodul
+  //=========================== RFID end ==========================
   
 }
 
@@ -130,11 +158,98 @@ void loop() {
 
   //=========================== Display  ==========================
   
-  lcd.setCursor(0, 1);
-  lcd.print(numberOfFreeParkingSpaces);
   //=========================== Display end =======================
 
+  //=========================== RFID ==============================
+   // Diese Funktion wird in Endlosschleife ausgeführt
+ 
+  // Nur wenn eine Karte gefunden wird und gelesen werden konnte, wird der Inhalt von IF ausgeführt
+  // PICC = proximity integrated circuit card = kontaktlose Chipkarte
+  if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial() ) {
+    Serial.print("Gelesene UID:");
+    for (byte i = 0; i < mfrc522.uid.size; i++) {
+      // Abstand zwischen HEX-Zahlen und führende Null bei Byte < 16
+      Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
+      Serial.print(mfrc522.uid.uidByte[i], HEX);
+    } 
+    Serial.println();
+ 
+    // UID Vergleichen mit card_uid
+    card_check = true;
+    for (int j=0; j<4; j++) {
+      if (mfrc522.uid.uidByte[j] != card_uid[j]) {
+        card_check = false;
+      }
+    }
+ 
+    // UID Vergleichen mit batch_uid
+    batch_check = true;
+    for (int j=0; j<4; j++) {
+      if (mfrc522.uid.uidByte[j] != batch_uid[j]) {
+        batch_check = false;
+            check_card1 = 1;
+      }
+    }
 
+
+    batch2_check = true;
+    for (int j=0; j<4; j++) {
+      if (mfrc522.uid.uidByte[j] != batch2_uid[j]) {
+        batch2_check = false;
+            check_card3 = 1;
+      }
+    }
+
+
+
+
+
+ 
+    if (card_check) {
+  
+      Serial.print("card");
+      servo();
+
+    if (checkSW == 0) {
+      lcd.clear();
+      lcd.print("Anzahl Freie P.: ");
+      lcd.setCursor(0, 1);
+      lcd.print("9");
+      checkSW = 1;
+    }
+    else{
+      lcd.clear();
+      lcd.print("Bitte bezahlen:");
+      lcd.setCursor(0, 1);
+      lcd.print("10.-");
+      delay(3000);
+      lcd.clear();
+      lcd.print("Anzahl Freie P.: ");
+      lcd.setCursor(0, 1);
+      lcd.print("10");
+      checkSW = 0;
+      
+      }
+      
+    }
+ 
+    if (batch_check) {
+     Serial.print("batch");
+     servo();
+    }
+
+
+    if (batch2_check) {
+      Serial.print("batch");
+      servo();
+    }
+ 
+    // Versetzt die gelesene Karte in einen Ruhemodus, um nach anderen Karten suchen zu können.
+    mfrc522.PICC_HaltA();
+    delay(1000);
+
+  }
+  //=========================== RFID end ==========================
 
 
 }
